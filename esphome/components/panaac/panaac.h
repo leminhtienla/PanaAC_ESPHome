@@ -1,11 +1,8 @@
 #pragma once
 
-#include "esphome/components/climate_ir/climate_ir.h"
+#include "definitions.h"
 #include "extra.h"
 #include <cinttypes>
-#include "definitions.h"
-
-#define DEBUG false
 
 namespace esphome
 {
@@ -37,6 +34,10 @@ namespace esphome
             void set_swingv(PanaACSwingV *swingv) { this->swingv_ = swingv; }
             void set_swingh(PanaACSwingH *swingh) { this->swingh_ = swingh; }
 
+            void update_fanlevel();
+
+            ClimateState ac_state;
+
         protected:
             void setup() override;
             void transmit_state() override;
@@ -51,11 +52,11 @@ namespace esphome
             bool supports_quiet_;
             bool fan_5level_;
 
-            ClimateState ac_state;
-
             PanaACFanLevel *fanlevel_{nullptr};
             PanaACSwingV *swingv_{nullptr};
             PanaACSwingH *swingh_{nullptr};
         };
+
+
     } // namespace panaac
 } // namespace esphome

@@ -1,6 +1,5 @@
 #include "extra.h"
-#include "esphome/core/log.h"
-#include <cstdlib>
+#include "panaac.h"
 
 namespace esphome
 {
@@ -16,26 +15,50 @@ namespace esphome
 
         void PanaACFanLevel::control(const std::string &value)
         {
-            this->publish_state(value);
             ESP_LOGI(TAG, "Fan level selected: %s", value.c_str());
 
-            if (this->climate_ != nullptr)
+            if (value == STR_FAN_AUTO)
             {
-                // int level = 0;
-                // if (value == "Level 1")
-                //     level = 1;
-                // else if (value == "Level 2")
-                //     level = 2;
-                // else if (value == "Level 3")
-                //     level = 3;
-                // else if (value == "Level 4")
-                //     level = 4;
-                // else if (value == "Level 5")
-                //     level = 5;
-
-                // ESP_LOGD(TAG, "Mapped fan level: %d", level);
-                // this->parent_->apply_fan_level(level); // optional callback
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_AUTO;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_AUTO;
             }
+            else if (value == STR_FAN_L1)
+            {
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_LOW;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_LEVEL_1;
+            }
+            else if (value == STR_FAN_L2)
+            {
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_LOW;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_LEVEL_2;
+            }
+            else if (value == STR_FAN_L3)
+            {
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_MEDIUM;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_LEVEL_3;
+            }
+            else if (value == STR_FAN_L4)
+            {
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_MEDIUM;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_LEVEL_4;
+            }
+            else if (value == STR_FAN_L5)
+            {
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_HIGH;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_LEVEL_5;
+            }
+            else if (value == STR_FAN_QUIET)
+            {
+                this->climate_->ac_state.fan_mode = climate::CLIMATE_FAN_QUIET;
+                this->climate_->ac_state.fan_level = PANAAC_FAN_QUIET;
+            }
+            else
+            {
+                return;
+            }
+
+            this->climate_->update_fanlevel();
+
         }
 
         void PanaACFanLevel::setup()
@@ -209,5 +232,5 @@ namespace esphome
         {
         }
 
-    }
-}
+    } // namespace panaac
+} // namespace esphome

@@ -1,7 +1,4 @@
 #include "panaac.h"
-#include "esphome/core/log.h"
-#include "esphome/components/remote_base/remote_base.h"
-#include <cstdlib>
 
 namespace esphome
 {
@@ -13,7 +10,7 @@ namespace esphome
             ClimateIR::setup();
 
             // state
-            ac_state.mode = climate::CLIMATE_MODE_COOL;
+            ac_state.mode = climate::CLIMATE_MODE_OFF;
             ac_state.temp = 24.0;
             ac_state.fan_mode = climate::CLIMATE_FAN_AUTO;
             ac_state.fan_level = PANAAC_FAN_AUTO;
@@ -52,6 +49,22 @@ namespace esphome
                 this->swingh_->traits.set_options({});
                 this->swingh_->set_internal(true);
             }
+
+            // initial state
+            this->mode = climate::CLIMATE_MODE_OFF;
+            this->target_temperature = 24.0;
+            this->fan_mode = climate::CLIMATE_FAN_AUTO;
+            if (this->swing_horizontal_)
+            {
+                this->swing_mode = climate::CLIMATE_SWING_BOTH;
+            }
+            else
+            {
+                this->swing_mode = climate::CLIMATE_SWING_VERTICAL;
+            }
+
+            transmit_state();
+
         }
 
         climate::ClimateTraits PanaACClimate::traits() {
@@ -552,6 +565,13 @@ namespace esphome
             {
                 this->swingh_->set_swinghpos(ac_state.swing_h_pos);
             }
+        }
+
+        void PanaACClimate::update_fanlevel()
+        {
+            this->fan_mode = ac_state.fan_mode;
+            transmit_state();
+            this->publish_state();
         }
 
     } // namespace panaac

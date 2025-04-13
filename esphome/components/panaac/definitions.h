@@ -1,6 +1,13 @@
 #pragma once
 
+#include "esphome/components/climate_ir/climate_ir.h"
+#include "esphome/components/select/select.h"
+#include "esphome/components/remote_base/remote_base.h"
+#include "esphome/core/log.h"
+#include <cstdlib>
 #include <cinttypes>
+
+#define DEBUG false
 
 namespace esphome
 {
@@ -99,5 +106,7 @@ namespace esphome
         static const char *STR_SWINGH_RIGHT = "Right";
         static const char *STR_SWINGH_RIGHTMAX = "Right Max";
 
-    }
-}
+        class PanaACClimate;
+
+    } // namespace panaac
+} // namespace esphome
