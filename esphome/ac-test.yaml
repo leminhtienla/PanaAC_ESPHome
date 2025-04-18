@@ -45,9 +45,10 @@ climate:
   - platform: panaac
     name: "Remote Controller"
     receiver_id: ir_receiver
-    supports_heat: false
+    supports_heat: True
     supports_quiet: True
     fan_5level: True
     swing_horizontal: True
+    temp_step: 0.5
     
     

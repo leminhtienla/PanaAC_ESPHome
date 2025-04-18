@@ -57,7 +57,7 @@ namespace esphome
                 return;
             }
 
-            this->climate_->update_fanlevel();
+            this->climate_->update_state();
 
         }
 
@@ -107,26 +107,82 @@ namespace esphome
 
         void PanaACSwingV::control(const std::string &value)
         {
-            this->publish_state(value);
             ESP_LOGI(TAG, "Swing Vertical selected: %s", value.c_str());
 
-            if (this->climate_ != nullptr)
+            if (value == STR_SWINGV_AUTO)
             {
-                // int level = 0;
-                // if (value == "Level 1")
-                //     level = 1;
-                // else if (value == "Level 2")
-                //     level = 2;
-                // else if (value == "Level 3")
-                //     level = 3;
-                // else if (value == "Level 4")
-                //     level = 4;
-                // else if (value == "Level 5")
-                //     level = 5;
-
-                // ESP_LOGD(TAG, "Mapped Swing Vertical: %d", level);
-                // this->parent_->apply_fan_level(level); // optional callback
+                this->climate_->ac_state.swing_v_pos = PANAAC_SWINGV_AUTO;
             }
+            else if (value == STR_SWINGV_HIGHEST)
+            {
+                this->climate_->ac_state.swing_v_pos = PANAAC_SWINGV_HIGHEST;
+                this->climate_->ac_state.last_swing_v_pos = PANAAC_SWINGV_HIGHEST;
+            }
+            else if (value == STR_SWINGV_HIGH)
+            {
+                this->climate_->ac_state.swing_v_pos = PANAAC_SWINGV_HIGH;
+                this->climate_->ac_state.last_swing_v_pos = PANAAC_SWINGV_HIGH;
+            }
+            else if (value == STR_SWINGV_MIDDLE)
+            {
+                this->climate_->ac_state.swing_v_pos = PANAAC_SWINGV_MIDDLE;
+                this->climate_->ac_state.last_swing_v_pos = PANAAC_SWINGV_MIDDLE;
+            }
+            else if (value == STR_SWINGV_LOW)
+            {
+                this->climate_->ac_state.swing_v_pos = PANAAC_SWINGV_LOW;
+                this->climate_->ac_state.last_swing_v_pos = PANAAC_SWINGV_LOW;
+            }
+            else if (value == STR_SWINGV_LOWEST)
+            {
+                this->climate_->ac_state.swing_v_pos = PANAAC_SWINGV_LOWEST;
+                this->climate_->ac_state.last_swing_v_pos = PANAAC_SWINGV_LOWEST;
+            }
+            else
+            {
+                return;
+            }
+
+            // swing mode
+            if (this->climate_->swing_horizontal_)
+            {
+                if (this->climate_->ac_state.swing_v_pos == PANAAC_SWINGV_AUTO)
+                {
+                    if (this->climate_->ac_state.swing_h_pos == PANAAC_SWINGH_AUTO)
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_BOTH;
+                    }
+                    else
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_VERTICAL;
+                    }
+                }
+                else
+                {
+                    if (this->climate_->ac_state.swing_h_pos == PANAAC_SWINGH_AUTO)
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_HORIZONTAL;
+                    }
+                    else
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_OFF;
+                    }
+                }
+            }
+            else
+            {
+                if (this->climate_->ac_state.swing_v_pos == PANAAC_SWINGV_AUTO)
+                {
+                    this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_VERTICAL;
+                }
+                else
+                {
+                    this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_OFF;
+                }
+            }
+
+            this->climate_->update_state();
+
         }
 
         void PanaACSwingV::set_swingvpos(SwingVPos swingvpos)
@@ -172,26 +228,82 @@ namespace esphome
 
         void PanaACSwingH::control(const std::string &value)
         {
-            this->publish_state(value);
             ESP_LOGI(TAG, "Swing Horizontal selected: %s", value.c_str());
 
-            if (this->climate_ != nullptr)
+            if (value == STR_SWINGH_AUTO)
             {
-                // int level = 0;
-                // if (value == "Level 1")
-                //     level = 1;
-                // else if (value == "Level 2")
-                //     level = 2;
-                // else if (value == "Level 3")
-                //     level = 3;
-                // else if (value == "Level 4")
-                //     level = 4;
-                // else if (value == "Level 5")
-                //     level = 5;
-
-                // ESP_LOGD(TAG, "Mapped Swing Vertical: %d", level);
-                // this->parent_->apply_fan_level(level); // optional callback
+                this->climate_->ac_state.swing_h_pos = PANAAC_SWINGH_AUTO;
             }
+            else if (value == STR_SWINGH_LEFTMAX)
+            {
+                this->climate_->ac_state.swing_h_pos = PANAAC_SWINGH_LEFTMAX;
+                this->climate_->ac_state.last_swing_h_pos = PANAAC_SWINGH_LEFTMAX;
+            }
+            else if (value == STR_SWINGH_LEFT)
+            {
+                this->climate_->ac_state.swing_h_pos = PANAAC_SWINGH_LEFT;
+                this->climate_->ac_state.last_swing_h_pos = PANAAC_SWINGH_LEFT;
+            }
+            else if (value == STR_SWINGH_MIDDLE)
+            {
+                this->climate_->ac_state.swing_h_pos = PANAAC_SWINGH_MIDDLE;
+                this->climate_->ac_state.last_swing_h_pos = PANAAC_SWINGH_MIDDLE;
+            }
+            else if (value == STR_SWINGH_RIGHT)
+            {
+                this->climate_->ac_state.swing_h_pos = PANAAC_SWINGH_RIGHT;
+                this->climate_->ac_state.last_swing_h_pos = PANAAC_SWINGH_RIGHT;
+            }
+            else if (value == STR_SWINGH_RIGHTMAX)
+            {
+                this->climate_->ac_state.swing_h_pos = PANAAC_SWINGH_RIGHTMAX;
+                this->climate_->ac_state.last_swing_h_pos = PANAAC_SWINGH_RIGHTMAX;
+            }
+            else
+            {
+                return;
+            }
+
+            // swing mode
+            if (this->climate_->swing_horizontal_)
+            {
+                if (this->climate_->ac_state.swing_v_pos == PANAAC_SWINGV_AUTO)
+                {
+                    if (this->climate_->ac_state.swing_h_pos == PANAAC_SWINGH_AUTO)
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_BOTH;
+                    }
+                    else
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_VERTICAL;
+                    }
+                }
+                else
+                {
+                    if (this->climate_->ac_state.swing_h_pos == PANAAC_SWINGH_AUTO)
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_HORIZONTAL;
+                    }
+                    else
+                    {
+                        this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_OFF;
+                    }
+                }
+            }
+            else
+            {
+                if (this->climate_->ac_state.swing_v_pos == PANAAC_SWINGV_AUTO)
+                {
+                    this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_VERTICAL;
+                }
+                else
+                {
+                    this->climate_->ac_state.swing_mode = climate::CLIMATE_SWING_OFF;
+                }
+            }
+
+            this->climate_->update_state();
+
         }
 
         void PanaACSwingH::set_swinghpos(SwingHPos swinghpos)

@@ -12,7 +12,7 @@ namespace esphome
         {
         public:
             PanaACClimate() : climate_ir::ClimateIR(
-                                  PANAAC_TEMP_MIN, PANAAC_TEMP_MAX, 1.5f, true, true,
+                                  PANAAC_TEMP_MIN, PANAAC_TEMP_MAX, 1.0f, true, true,
                                   {climate::CLIMATE_FAN_AUTO,
                                    climate::CLIMATE_FAN_LOW,
                                    climate::CLIMATE_FAN_MEDIUM,
@@ -34,9 +34,11 @@ namespace esphome
             void set_swingv(PanaACSwingV *swingv) { this->swingv_ = swingv; }
             void set_swingh(PanaACSwingH *swingh) { this->swingh_ = swingh; }
 
-            void update_fanlevel();
+            void update_state();
+            void transmit_data();
 
             ClimateState ac_state;
+            bool swing_horizontal_;
 
         protected:
             void setup() override;
@@ -47,7 +49,6 @@ namespace esphome
             bool decode_data(remote_base::RemoteReceiveData data, std::vector<uint8_t>& state_bytes);
             bool decode_state(std::vector<uint8_t> state_bytes, ClimateState& state);
             
-            bool swing_horizontal_;
             float temp_step_;
             bool supports_quiet_;
             bool fan_5level_;

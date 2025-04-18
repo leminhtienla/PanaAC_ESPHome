@@ -60,8 +60,8 @@ namespace esphome
             PANAAC_SWINGV_HIGHEST = 0x01,
             PANAAC_SWINGV_HIGH = 0x02,
             PANAAC_SWINGV_MIDDLE = 0x03,
-            PANAAC_SWINGV_LOW = 0x04,
             PANAAC_SWINGV_LOWEST = 0x05,
+            PANAAC_SWINGV_LOW = 0x04,
         };
 
         enum SwingHPos {
@@ -82,6 +82,8 @@ namespace esphome
             climate::ClimateSwingMode swing_mode;
             SwingVPos swing_v_pos;
             SwingHPos swing_h_pos;
+            SwingVPos last_swing_v_pos;
+            SwingHPos last_swing_h_pos;
         };
 
         static const char *STR_FAN_AUTO = "Auto";
