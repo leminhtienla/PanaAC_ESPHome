@@ -1,12 +1,16 @@
 # Panasonic AC IR Remote Controller for ESPHome
 
-This is a custom ESPHome external component for controlling Panasonic air conditioners via infrared. It **inherits from ESPHome's `ClimateIR`** and adds support for:
+This is a custom ESPHome external component for controlling Panasonic air conditioners via infrared.
+
+It **inherits from ESPHome's `ClimateIR`** and adds support for:
 - **IR Receiver** to detect and decode Panasonic AC remote commands (216 bit frame)
 - **Temperature step** (0.5 or 1.0 degree)
 - **Fan Level Control** (1–5, plus quiet)
+    - Default 3 levels without quiet, can configure 5 levels and quiet separately
 - **Swing Control**:
   - **Vertical Swing** (Highest, High, Middle, Low, Lowest, Auto)
   - **Horizontal Swing** (Left Max, Left, Middle, Right, Right Max, Auto)
+    - Default off, can configure on.
 
 ---
 
@@ -16,9 +20,9 @@ This is a custom ESPHome external component for controlling Panasonic air condit
 - ✅ Based on ESPHome `ClimateIR` class for climate control
 - ✅ IR receiver support to sync state from physical remote
 - ✅ `select` components for:
-  - Fan level (default 3 levels without quiet, can configure 5 levels and quiet separately)
-  - Swing vertical (always off)
-  - Swing horizontal (default off, can configure on)
+  - Fan level 
+  - Swing vertical
+  - Swing horizontal
 - ✅ Auto state updates when IR signal is received
 
 ---
@@ -36,7 +40,7 @@ This is a custom ESPHome external component for controlling Panasonic air condit
 
 ## 📂 Installation
 
-1. Copy `esphome/components/panaac` folder to your HASS ESPHome 'components' folder.
+1. Copy `esphome/components/panaac` folder to your HASS ESPHome `components` folder.
 2. Add climate component to your ESPHome YAML configuration (refer example `ac-test.yaml`)
 
     ```yaml
