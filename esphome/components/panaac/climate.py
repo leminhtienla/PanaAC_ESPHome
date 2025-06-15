@@ -34,7 +34,7 @@ CONF_SWINGV_ID = "swingv_id"
 CONF_SWINGH_ID = "swingh_id"
 CONF_FANLEVEL_ID = "fanlevel_id"
 
-CONFIG_SCHEMA = climate_ir.CLIMATE_IR_WITH_RECEIVER_SCHEMA.extend({
+CONFIG_SCHEMA = climate_ir.climate_ir_with_receiver_schema(PanaACClimate).extend({
     cv.GenerateID(): cv.declare_id(PanaACClimate),
     cv.GenerateID(CONF_SWINGV_ID): cv.declare_id(PanaACSwingV),
     cv.GenerateID(CONF_SWINGH_ID): cv.declare_id(PanaACSwingH),
@@ -46,8 +46,9 @@ CONFIG_SCHEMA = climate_ir.CLIMATE_IR_WITH_RECEIVER_SCHEMA.extend({
 })
 
 async def to_code(config):
-    var = cg.new_Pvariable(config[CONF_ID])
-    await climate_ir.register_climate_ir(var, config)
+    var = await climate_ir.new_climate_ir(config)
+    # var = cg.new_Pvariable(config[CONF_ID])
+    # await climate_ir.register_climate_ir(var, config)
     cg.add(var.set_swing_horizontal(config[CONF_SWING_HORIZONTAL]))
     cg.add(var.set_temp_step(config[CONF_TEMP_STEP]))
     cg.add(var.set_supports_quiet(config[CONF_SUPPORT_QUIET]))
