@@ -47,8 +47,6 @@ CONFIG_SCHEMA = climate_ir.climate_ir_with_receiver_schema(PanaACClimate).extend
 
 async def to_code(config):
     var = await climate_ir.new_climate_ir(config)
-    # var = cg.new_Pvariable(config[CONF_ID])
-    # await climate_ir.register_climate_ir(var, config)
     cg.add(var.set_swing_horizontal(config[CONF_SWING_HORIZONTAL]))
     cg.add(var.set_temp_step(config[CONF_TEMP_STEP]))
     cg.add(var.set_supports_quiet(config[CONF_SUPPORT_QUIET]))
@@ -61,7 +59,6 @@ async def to_code(config):
     cg.add(fanlevel.set_internal(False))    
     cg.add(fanlevel.set_parent_climate(var))
     cg.add(cg.App.register_component(fanlevel))
-    cg.add(cg.App.register_select(fanlevel))
     cg.add(var.set_fanlevel(fanlevel))
     
     # SwingV select
@@ -71,7 +68,6 @@ async def to_code(config):
     cg.add(swingv.set_internal(False))    
     cg.add(swingv.set_parent_climate(var))
     cg.add(cg.App.register_component(swingv))
-    cg.add(cg.App.register_select(swingv))
     cg.add(var.set_swingv(swingv))
 
     # SwingH select
@@ -81,5 +77,4 @@ async def to_code(config):
     cg.add(swingh.set_internal(False))    
     cg.add(swingh.set_parent_climate(var))
     cg.add(cg.App.register_component(swingh))
-    cg.add(cg.App.register_select(swingh))
     cg.add(var.set_swingh(swingh))
